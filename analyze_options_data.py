@@ -1,5 +1,6 @@
 import tensorflow as tf
 import datetime
+import math
 import re
 import os
 import json
@@ -27,6 +28,11 @@ def load_df_from_file():
 
 # Generates some extra columns for the DF that provide useful transformations.
 def post_process_df(df):
+  def duration_func(row):
+    print(todays_date)
+    return (row["expiration_date"] - todays_date).days
+  df["days_til_expiry"] = df.apply(duration_func, axis=1)
+
   def bid_premium_func(row):
     if row["is_call"]:
       intrinsic_value = row["underlying_price"] - row["strike"]
@@ -42,10 +48,15 @@ def post_process_df(df):
     return row["ask"] - intrinsic_value
   df["ask_premium"] = df.apply(ask_premium_func, axis=1)
 
-  def duration_func(row):
-    print(todays_date)
-    return (row["expiration_date"] - todays_date).days
-  df["days_til_expiry"] = df.apply(duration_func, axis=1)
+  def loan_amount_func(row):
+    return row["underlying_price"] - (row["ask"] - row["ask_premium"])
+  df["loan_amount"] = df.apply(loan_amount_func, axis=1)
+
+  def loan_apr_func(row):
+    percentage_cost = row["ask_premium"] / row["loan_amount"]
+    return percentage_cost * (365.0 / row["days_til_expiry"])
+  df["loan_apr"] = df.apply(loan_apr_func, axis=1)
+
 
 def analyze_options_data():
   df = load_df_from_file()

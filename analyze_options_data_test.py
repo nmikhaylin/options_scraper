@@ -37,6 +37,10 @@ class AnalyzeOptionsDataTest(test.TestCase):
                           self._test_df["bid_premium"])
       self.assertAllClose([1.02] * DEFAULT_NUM_ROWS,
                           self._test_df["ask_premium"])
+      self.assertAllClose([100.0, 95.0, 80.0] * 2,
+                          self._test_df["loan_amount"])
+      self.assertAllClose([0.18615 , 0.195947, 0.232687] * 2,
+                          self._test_df["loan_apr"])
 
   def testFindCoveredCalls(self):
     with self.test_session():
