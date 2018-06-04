@@ -11,14 +11,21 @@ FLAGS = tf.flags.FLAGS
 tf.flags.DEFINE_string(
     "pandas_msg_pack_file", None, "Serialized msgpack DataFrame for the current options data.")
 
-def analyze_options_data():
+def load_df_from_file():
   full_path = os.path.abspath(FLAGS.pandas_msg_pack_file)
   with open(full_path, 'r') as f:
     df = pd.read_msgpack(f)
     print(df)
+    return df
+
+
+def analyze_options_data():
+  df = load_df_from_file()
+
 
 def main(argv):
   analyze_options_data()
+
 
 if __name__ == "__main__":
   tf.flags.mark_flag_as_required('pandas_msg_pack_file')
