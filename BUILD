@@ -12,6 +12,12 @@ py_binary(
   deps = []
 )
 
+py_test(
+  name = "analyze_options_data_test",
+  srcs = ["analyze_options_data_test.py"],
+  deps = [":analyze_options_data"]
+)
+
 py_library(
   name = "scrape",
   srcs = ["scrape.py"],

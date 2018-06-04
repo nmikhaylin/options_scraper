@@ -14,6 +14,8 @@ tf.flags.DEFINE_string(
     "output_pandas_msg_pack_file", None, "File that the serialized msgpack of "
     "the pandas options data.")
 
+cur_time = datetime.date.today()
+
 def generate_data_frame(option_prices):
   regex = re.compile("(\d{6})([PC])")
   underlying_names = []
