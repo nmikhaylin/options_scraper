@@ -65,7 +65,7 @@ def generate_data_frame(option_prices):
       "iv": ivs,
       "volume": volumes,
       "expiration_date": expiration_dates,
-      "strikes": strikes,
+      "strike": strikes,
       "is_call": is_calls
   })
   df.to_msgpack(FLAGS.output_pandas_msg_pack_file)
