@@ -28,6 +28,7 @@ def generate_data_frame(option_prices):
   expiration_dates = []
   strikes = []
   is_calls = []
+  open_ints = []
 
   for option in option_prices:
     num_contracts = len(option["contract_names"])
@@ -41,6 +42,7 @@ def generate_data_frame(option_prices):
     strikes.extend(option["strikes"])
     ivs.extend(option["ivs"])
     volumes.extend(option["volumes"])
+    open_ints.extend(option["open_ints"])
     # Assume the expiration is always the same.
     for contract_name in option["contract_names"]:
       match = regex.search(contract_name)
@@ -53,6 +55,7 @@ def generate_data_frame(option_prices):
   assert(len(underlying_names) == len(last_prices))
   assert(len(underlying_names) == len(ivs))
   assert(len(underlying_names) == len(volumes))
+  assert(len(underlying_names) == len(open_ints))
   assert(len(underlying_names) == len(expiration_dates))
   assert(len(underlying_names) == len(strikes))
   assert(len(underlying_names) == len(is_calls))
@@ -64,18 +67,17 @@ def generate_data_frame(option_prices):
       "last_price": last_prices,
       "iv": ivs,
       "volume": volumes,
+      "open_ints": open_ints,
       "expiration_date": expiration_dates,
       "strike": strikes,
       "is_call": is_calls
   })
   df.to_msgpack(FLAGS.output_pandas_msg_pack_file)
-  print(df)
 
 def main(argv):
   with open(FLAGS.json_option_price_file) as f:
     option_data = json.load(f)
   df = generate_data_frame(option_data)
-  print(len(option_data))
 
 if __name__ == "__main__":
   tf.flags.mark_flag_as_required('json_option_price_file')

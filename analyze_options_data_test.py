@@ -23,7 +23,8 @@ class AnalyzeOptionsDataTest(test.TestCase):
       "last_price": [1.03, 6.03, 21.03, 1.03, 6.03, 21.03],
       "iv": [30.00] * DEFAULT_NUM_ROWS,
       "volume": [1, 10 ,100, 1, 10 ,100],
-      "expiration_date": [datetime.date(2018,1,21)] * DEFAULT_NUM_ROWS,
+      "open_ints": [1, 10 ,100, 1, 10 ,100],
+      "expiration_date": [pd.Timestamp(2018,1,21)] * DEFAULT_NUM_ROWS,
       "strike": [100.00, 95.0, 80.0, 100.00, 105.0, 120.0],
       "is_call": [True, True, True, False, False, False]
     })

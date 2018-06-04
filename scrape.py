@@ -5,8 +5,8 @@ import pprint
 
 BASE_URL = "https://finance.yahoo.com/quote/{underlying}/options"
 DATED_URL = "https://finance.yahoo.com/quote/{underlying}/options?date={option_date}"
-# STOCKS = ["AAPL", "TWTR", "CSCO", "CHGG", "GRUB", "AMZN"]
-STOCKS = ["AAPL"]
+STOCKS = ["AAPL", "TWTR", "CSCO", "CHGG", "GRUB", "AMZN"]
+# STOCKS = ["AAPL"]
 
 def extract_dict(body, start_pos):
   bracket_itr = re.finditer("[{}]", body[start_pos:])
@@ -50,6 +50,7 @@ class OptionsScraper(scrapy.Spider):
     bids = [float(x.replace(",","")) for x in response.css(".data-col4::text").extract()]
     asks = [float(x.replace(",","")) for x in response.css(".data-col5::text").extract()]
     volumes = [int(x.replace(",","")) for x in response.css(".data-col8::text").extract()]
+    open_ints = [int(x.replace(",","")) for x in response.css(".data-col9::text").extract()]
     ivs = [float(x.replace(",","")[0:-1]) for x in response.css(".data-col10::text").extract()]
     expiration_match = re.search( "\"expirationDates\":(\[[\w,]+\])", response.body)
     actual_price = re.findall( "\"regularMarketPrice\":(\{[^}]+\})", response.body)
@@ -63,20 +64,6 @@ class OptionsScraper(scrapy.Spider):
     if expiration_match:
       expiration_dates = json.loads(expiration_match.group(1))
 
-#     print(
-#         stock_name,
-#         underlying_name,
-#         underlying_price,
-#         contract_names[0:10],
-#         strikes[0:10],
-#         last_prices[0:10],
-#         bids[0:10],
-#         asks[0:10],
-#         volumes[0:10],
-#         ivs[0:10],
-#         expiration_dates
-#     )
-
     for exp_date in expiration_dates:
       yield scrapy.Request(DATED_URL.format(underlying=stock_name, option_date=exp_date))
 
@@ -89,6 +76,7 @@ class OptionsScraper(scrapy.Spider):
       "bids": bids,
       "asks": asks,
       "volumes": volumes,
+      "open_ints": open_ints,
       "ivs": ivs,
       "underlying_price": underlying_price
     }
