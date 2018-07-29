@@ -23,12 +23,12 @@ class AnalyzeOptionsDataTest(test.TestCase):
       "last_price": [1.03, 6.03, 21.03, 1.03, 6.03, 21.03],
       "iv": [30.00] * DEFAULT_NUM_ROWS,
       "volume": [1, 10 ,100, 1, 10 ,100],
-      "open_ints": [1, 10 ,100, 1, 10 ,100],
+      "open_ints": [200] * DEFAULT_NUM_ROWS,
       "expiration_date": [pd.Timestamp(2018,1,21)] * DEFAULT_NUM_ROWS,
       "strike": [100.00, 95.0, 80.0, 100.00, 105.0, 120.0],
       "is_call": [True, True, True, False, False, False]
     })
-    analyze_options_data.post_process_df(self._test_df)
+    self._test_df = analyze_options_data.post_process_df(self._test_df)
 
   def testPostProcess(self):
     with self.test_session():
@@ -41,7 +41,9 @@ class AnalyzeOptionsDataTest(test.TestCase):
       self.assertAllClose([100.0, 95.0, 80.0] * 2,
                           self._test_df["loan_amount"])
       self.assertAllClose([0.18615 , 0.195947, 0.232687] * 2,
-                          self._test_df["loan_apr"])
+                          self._test_df["buy_loan_apr"])
+      self.assertAllClose([0.1825, 0.19210526, 0.228125] * 2,
+                          self._test_df["sell_loan_apr"])
 
   def testFindCoveredCalls(self):
     with self.test_session():

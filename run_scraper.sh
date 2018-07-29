@@ -14,4 +14,4 @@ bazel run -- :convert_to_pandas --json_option_price_file=$JSON_FILENAME \
 rm $PWD/data/option_prices_latest.msgpack
 ln -s $PANDAS_FILENAME $PWD/data/option_prices_latest.msgpack
 echo $PANDAS_FILENAME
-bazel run -- :analyze_options_data --pandas_msg_pack_file=$PANDAS_FILENAME
+bazel run -- :analyze_options_data --pandas_msg_pack_file=$PANDAS_FILENAME --output_df_csv=/tmp/analyze_options_data_out.csv

@@ -5,7 +5,7 @@ import pprint
 
 BASE_URL = "https://finance.yahoo.com/quote/{underlying}/options"
 DATED_URL = "https://finance.yahoo.com/quote/{underlying}/options?date={option_date}"
-STOCKS = ["AAPL", "TWTR", "CSCO", "CHGG", "GRUB", "AMZN"]
+STOCKS = ["OEX.X", "AAPL", "TWTR", "CSCO", "CHGG", "GRUB", "AMZN", "SPY", "GOOG", "GS", "BAC", "BA", "C", "CAT"]
 # STOCKS = ["AAPL"]
 
 def extract_dict(body, start_pos):
